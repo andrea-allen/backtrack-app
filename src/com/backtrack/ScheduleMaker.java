@@ -2,16 +2,26 @@ package com.backtrack;
 
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 public class ScheduleMaker {
 
-    private HashMap<String, Integer> itemMinutes;
+    // ScheduleMaker should get input from JS fields from the user (see TWU project) through a controller of some kind maybe
+    // ScheduleMaker should know about the ETA
+    // Should just have methods to add items to its tables and then generate a schedule from it
+    // Should own a schedule object that it can edit and create
+    // Should be responsible for ETA and Wake up time
+
     private HashMap<String, LocalTime> itemTime;
+    private LinkedList<Item> itemOrder;
     private Schedule schedule;
+    private LocalTime ETA;
+    private LocalTime wake_up_time;
 
     public ScheduleMaker() {
-        itemMinutes = new HashMap<>();
         itemTime = new HashMap<>();
+        itemOrder = new LinkedList<>(); //Should start out backwards, after users put in their items in chronlogical order
         schedule = new Schedule();
     }
 
@@ -24,29 +34,27 @@ public class ScheduleMaker {
         return schedule;
     }
 
-    public void addItemMinutes(String item, Integer minutes) {
-        itemMinutes.put(item, minutes);
+    public void setETA(LocalTime ETA) {
+        this.ETA = ETA;
     }
 
-    public void addItemTime(String item, LocalTime time) {
-        itemTime.put(item, time);
+    public LocalTime getETA() {
+        return this.ETA;
     }
 
-    public void addAll(String item, Integer minutes) {
-        addItemMinutes(item, minutes);
-        LocalTime startTime = computeStartTime(itemMinutes.get(item));
-        System.out.println("Computed Start Time");
-        System.out.println(startTime.toString());
-        addItemTime(item, startTime);
+    public void add(Item item) {
+        itemOrder.add(item);
     }
 
-    private LocalTime computeStartTime(Integer minutes) {
-        System.out.println(schedule.getETA());
-        return schedule.getETA().minusMinutes(minutes);
-    }
+    public void updateItemTimes(){
+        LocalTime endTime = this.ETA;
+        while (!itemOrder.isEmpty()) {
+            Item item = itemOrder.pop();
+            item.setStartTime(endTime);
+            itemTime.put(item.getItemName(), item.getStartTime());
+            endTime = item.getStartTime();
 
-    public HashMap<String, Integer> getItemMinutes() {
-        return itemMinutes;
+        }
     }
 
     public HashMap<String, LocalTime> getItemTime() {

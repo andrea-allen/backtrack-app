@@ -1,9 +1,11 @@
 package com.backtrack;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalTime;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,12 +13,14 @@ public class ScheduleMakerTest {
 
     Schedule schedule;
     Item get_to_work;
+    Item eat_breakfast;
     ScheduleMaker scheduleMaker;
 
     @BeforeEach
     public void setUp() {
         schedule = new Schedule();
         get_to_work = new Item("Get to work", 45);
+        eat_breakfast = new Item("Eat Breakfast", 15);
         schedule.addItem(get_to_work);
         scheduleMaker = new ScheduleMaker();
     }
@@ -30,11 +34,31 @@ public class ScheduleMakerTest {
 
     @Test
     public void shouldComputeStartTimeWhenETAIsSet(){
-        schedule.setETA(LocalTime.of(9,30));
-        assertEquals(LocalTime.of(9,30), schedule.getETA());
-        scheduleMaker = new ScheduleMaker(schedule);
-        scheduleMaker.addAll(get_to_work.getItemName(), get_to_work.getMinutes());
-        assertEquals(schedule.getETA().minusMinutes(get_to_work.getMinutes()), scheduleMaker.getItemTime().get(get_to_work.getItemName()));
+        scheduleMaker.setETA(LocalTime.of(9,30));
+        assertEquals(LocalTime.of(9,30), scheduleMaker.getETA());
+        scheduleMaker.add(get_to_work);
+        scheduleMaker.updateItemTimes();
+        assertEquals(scheduleMaker.getETA().minusMinutes(get_to_work.getMinutes()), scheduleMaker.getItemTime().get(get_to_work.getItemName()));
+    }
+
+    @Test
+    public void shouldProvideCorrectStartTimeWhenThereAreTwoItems() {
+        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.add(get_to_work);
+        scheduleMaker.add(eat_breakfast);
+        scheduleMaker.updateItemTimes();
+        assertEquals(scheduleMaker.getETA().minusMinutes(get_to_work.getMinutes()).minusMinutes(eat_breakfast.getMinutes()), scheduleMaker.getItemTime().get(eat_breakfast.getItemName()));
+    }
+
+    @Test
+    public void shouldUpdateItemTimes() {
+        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.add(get_to_work);
+        scheduleMaker.add(eat_breakfast);
+        HashMap<String, LocalTime> itemTimes = scheduleMaker.getItemTime();
+        scheduleMaker.updateItemTimes();
+        assertEquals(LocalTime.of(8,45), itemTimes.get(get_to_work.getItemName()));
+        assertEquals(LocalTime.of(8,30), itemTimes.get(eat_breakfast.getItemName()));
     }
 
 
