@@ -1,24 +1,40 @@
 package com.backtrack;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Schedule {
 
-    private ArrayList<String> items;
+    private ArrayList<Item> items;
+    private LocalTime ETA;
 
     public Schedule() {
         items = new ArrayList<>();
+        ETA = LocalTime.now();
     }
 
-    public void addItem(String item) {
+    //ETA should maybe first belong to scheduleMaker?
+    public void setETA(LocalTime ETA) {
+        this.ETA = ETA;
+    }
+
+    public void addItem(Item item) {
         items.add(item);
     }
 
-    public ArrayList<String> getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
+    public LocalTime getETA() {
+        return ETA;
+    }
+
     public String listItems() {
-        return items.toString();
+        StringBuilder itemList = new StringBuilder();
+        for (Item item : items) {
+            itemList.append(item.getItemName()+'\n');
+        }
+        return itemList.toString();
     }
 }

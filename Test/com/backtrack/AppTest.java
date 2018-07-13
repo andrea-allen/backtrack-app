@@ -13,10 +13,10 @@ public class AppTest {
         Schedule testSchedule = new Schedule();
 
         //ACT
-        testSchedule.addItem("Get to Work");
+        testSchedule.addItem(new Item("Get to Work",45));
 
         //ASSERT
-        assertEquals("Get to Work", testSchedule.getItems().get(0));
+        assertEquals("Get to Work", testSchedule.getItems().get(0).getItemName());
     }
 
     @Test
@@ -25,10 +25,10 @@ public class AppTest {
         Schedule testSchedule = new Schedule();
 
         //ACT
-        testSchedule.addItem("Get to Work");
+        testSchedule.addItem(new Item("Get to Work", 45));
 
         //ASSERT
-        assertEquals("[Get to Work]", testSchedule.listItems());
+        assertEquals("Get to Work"+'\n', testSchedule.listItems());
     }
 
 }
