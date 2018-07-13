@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 public class ScheduleMaker {
+    private static final long SNOOZE_TIME = 10;
 
     // ScheduleMaker should get input from JS fields from the user (see TWU project) through a controller of some kind maybe
     // ScheduleMaker should know about the ETA
@@ -59,5 +60,28 @@ public class ScheduleMaker {
 
     public HashMap<String, LocalTime> getItemTime() {
         return itemTime;
+    }
+
+    public LocalTime getWakeUpTime() {
+        return wake_up_time;
+    }
+
+    public void setWake_up_time() {
+        wake_up_time = getEarliestTime().minusMinutes(SNOOZE_TIME);
+        itemTime.put("Wake Up", wake_up_time);
+    }
+
+    public LocalTime getEarliestTime() {
+        LocalTime minTime = this.ETA;
+        for (LocalTime time : itemTime.values()) {
+            if (time.isBefore(minTime)) {
+                minTime = time;
+            }
+        }
+        return minTime;
+    }
+
+    public void generateSchedule() {
+        schedule.setSchedule(itemTime);
     }
 }

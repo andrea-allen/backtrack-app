@@ -1,6 +1,5 @@
 package com.backtrack;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,6 @@ public class ScheduleMakerTest {
         schedule = new Schedule();
         get_to_work = new Item("Get to work", 45);
         eat_breakfast = new Item("Eat Breakfast", 15);
-        schedule.addItem(get_to_work);
         scheduleMaker = new ScheduleMaker();
     }
 
@@ -59,6 +57,16 @@ public class ScheduleMakerTest {
         scheduleMaker.updateItemTimes();
         assertEquals(LocalTime.of(8,45), itemTimes.get(get_to_work.getItemName()));
         assertEquals(LocalTime.of(8,30), itemTimes.get(eat_breakfast.getItemName()));
+    }
+
+    @Test
+    public void shouldYieldCorrectWakeUpTime() {
+        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.add(get_to_work);
+        scheduleMaker.add(eat_breakfast);
+        scheduleMaker.updateItemTimes();
+        scheduleMaker.setWake_up_time();
+        assertEquals(LocalTime.of(8,20), scheduleMaker.getWakeUpTime());
     }
 
 
