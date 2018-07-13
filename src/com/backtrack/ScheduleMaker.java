@@ -1,9 +1,7 @@
 package com.backtrack;
 
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class ScheduleMaker {
     private static final long SNOOZE_TIME = 10;
@@ -19,16 +17,13 @@ public class ScheduleMaker {
     private Schedule schedule;
     private LocalTime ETA;
     private LocalTime wake_up_time;
+    private ArrayList<Item> scheduleOrder;
 
     public ScheduleMaker() {
         itemTime = new HashMap<>();
         itemOrder = new LinkedList<>(); //Should start out backwards, after users put in their items in chronlogical order
+        scheduleOrder = new ArrayList<>();
         schedule = new Schedule();
-    }
-
-    public ScheduleMaker(Schedule schedule) {
-        this();
-        this.schedule = schedule;
     }
 
     public Schedule getSchedule() {
@@ -37,6 +32,7 @@ public class ScheduleMaker {
 
     public void setETA(LocalTime ETA) {
         this.ETA = ETA;
+        itemTime.put("Get there", this.ETA);
     }
 
     public LocalTime getETA() {
@@ -49,13 +45,18 @@ public class ScheduleMaker {
 
     public void updateItemTimes(){
         LocalTime endTime = this.ETA;
+
+        scheduleOrder.add(new Item("Get there", 0));
+
         while (!itemOrder.isEmpty()) {
             Item item = itemOrder.pop();
             item.setStartTime(endTime);
             itemTime.put(item.getItemName(), item.getStartTime());
             endTime = item.getStartTime();
-
+            scheduleOrder.add(item);
         }
+
+        scheduleOrder.add(new Item("Wake Up", ((int) SNOOZE_TIME)));
     }
 
     public HashMap<String, LocalTime> getItemTime() {
@@ -82,6 +83,6 @@ public class ScheduleMaker {
     }
 
     public void generateSchedule() {
-        schedule.setSchedule(itemTime);
+        schedule.setSchedule(itemTime, scheduleOrder);
     }
 }

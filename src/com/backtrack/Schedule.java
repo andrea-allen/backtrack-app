@@ -3,7 +3,6 @@ package com.backtrack;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Schedule {
 
@@ -13,26 +12,26 @@ public class Schedule {
     // Schedule should just know about: Wake up time, all activites and build a string out of them, and ETA
 
     private HashMap<String, LocalTime> items;
-    private LinkedList<Item> itemOrder;
+    private ArrayList<Item> scheduleOrder;
     private LocalTime ETA;
 
     public Schedule() {
         this.items = new HashMap<>();
-    }
-
-    public HashMap<String, LocalTime> getItems() {
-        return items;
+        this.scheduleOrder = new ArrayList<>();
     }
 
     public String listItems() {
         StringBuilder itemList = new StringBuilder();
-        for (String item : items.keySet()) {
-            itemList.append(item+" - "+ items.get(item)+'\n');
+        for (Item item : scheduleOrder) {
+            String itemName = item.getItemName();
+            itemList.insert(0, itemName + " - " + items.get(itemName)+'\n');
         }
         return itemList.toString();
     }
 
-    public void setSchedule(HashMap<String,LocalTime> itemTimes) {
+    public void setSchedule(HashMap<String,LocalTime> itemTimes, ArrayList<Item> scheduleOrder) {
         this.items = itemTimes;
+        this.scheduleOrder = scheduleOrder;
     }
+
 }
