@@ -1,4 +1,4 @@
-package com.backtrack;
+package com.backtrack.model;
 
 import java.time.LocalTime;
 

@@ -1,5 +1,8 @@
 package com.backtrack;
 
+import com.backtrack.model.Item;
+import com.backtrack.model.Schedule;
+import com.backtrack.model.ScheduleMaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

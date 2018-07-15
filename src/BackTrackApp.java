@@ -1,3 +1,5 @@
+import com.backtrack.model.Main;
+
 import javax.swing.*;
 import java.io.IOException;
 
@@ -11,7 +13,7 @@ public class BackTrackApp {
                 frame.pack();
                 frame.setVisible(true);
                 try {
-                    com.backtrack.Main.main();
+                    Main.main();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

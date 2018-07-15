@@ -1,4 +1,6 @@
 
+import com.backtrack.model.ScheduleMaker;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -17,7 +19,10 @@ public class ClassFrameEx extends JFrame {
     public static JButton inputButton = new JButton("Send");
     public static JTextArea editTextArea = new JTextArea("Type Here!");
     public static JTextArea uneditTextArea = new JTextArea();
-    private String myString;
+    public static JTextArea anotherTextArea = new JTextArea("Minute here!");
+    private String hourString;
+    private ScheduleMaker scheduleMaker;
+    private String minuteString;
 
     public ClassFrameEx(String title) {
 
@@ -31,12 +36,15 @@ public class ClassFrameEx extends JFrame {
         editTextArea.setBackground(Color.BLUE);
         editTextArea.setForeground(Color.WHITE);
 
+        anotherTextArea.setBackground(Color.GREEN);
+        anotherTextArea.setForeground(Color.WHITE);
         //SET CONTENT PANE
         Container c = getContentPane();
 
         //ADD COMPONENTS TO CONTENT PANE
         c.add(uneditTextArea, BorderLayout.CENTER);
         c.add(editTextArea, BorderLayout.CENTER);
+        c.add(anotherTextArea, BorderLayout.SOUTH);
         c.add(inputButton, BorderLayout.WEST);
 
         ClassFrameEx.inputButton.addActionListener(new ActionListener() {
@@ -44,13 +52,23 @@ public class ClassFrameEx extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // MA - Using the class field myString to receive text from text area
+                // MA - Using the class field hourString to receive text from text area
 
-                myString = editTextArea.getText();
+                hourString = editTextArea.getText();
+
+                minuteString = anotherTextArea.getText();
 
                 editTextArea.setText("");
 
-                System.out.println(myString);
+                System.out.println(hourString);
+
+                int hour = Integer.parseInt(hourString);
+
+                System.out.println("hour " + hour);
+
+                int minute = Integer.parseInt(minuteString);
+
+                System.out.println("minute: " + minute);
             }
         });
     }
