@@ -17,6 +17,7 @@ public class BackTrackApp {
                 );
                 frame.pack();
                 frame.setVisible(true);
+                //TODO: Could probably remove this:
                 try {
                     Main.main();
                 } catch (IOException e) {
