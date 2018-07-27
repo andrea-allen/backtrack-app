@@ -13,7 +13,6 @@ public class Schedule {
 
     private HashMap<String, LocalTime> items;
     private ArrayList<Item> scheduleOrder;
-    private LocalTime ETA;
 
     public Schedule() {
         this.items = new HashMap<>();
@@ -32,6 +31,10 @@ public class Schedule {
     public void setSchedule(HashMap<String,LocalTime> itemTimes, ArrayList<Item> scheduleOrder) {
         this.items = itemTimes;
         this.scheduleOrder = scheduleOrder;
-    }
+        }
 
+    public void clear() {
+        this.items.clear();
+        this.scheduleOrder.clear();
+    }
 }

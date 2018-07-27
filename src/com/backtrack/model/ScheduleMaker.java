@@ -17,6 +17,7 @@ public class ScheduleMaker {
     private Schedule schedule;
     private LocalTime ETA;
     private LocalTime wake_up_time;
+    private String destination;
     private ArrayList<Item> scheduleOrder;
 
     public ScheduleMaker() {
@@ -30,9 +31,10 @@ public class ScheduleMaker {
         return schedule;
     }
 
-    public void setETA(LocalTime ETA) {
+    public void setETA(LocalTime ETA, String destination) {
         this.ETA = ETA;
-        itemTime.put("Get there", this.ETA);
+        this.destination = destination;
+        itemTime.put(destination, this.ETA);
     }
 
     public LocalTime getETA() {
@@ -46,7 +48,7 @@ public class ScheduleMaker {
     public void updateItemTimes(){
         LocalTime endTime = this.ETA;
 
-        scheduleOrder.add(new Item("Get there", 0));
+        scheduleOrder.add(new Item(destination, 0));
 
         while (!itemOrder.isEmpty()) {
             Item item = itemOrder.pop();
@@ -84,5 +86,12 @@ public class ScheduleMaker {
 
     public void generateSchedule() {
         schedule.setSchedule(itemTime, scheduleOrder);
+    }
+
+    public void clear() {
+        this.itemTime.clear();
+        this.itemOrder.clear();
+        this.scheduleOrder.clear();
+        this.schedule.clear();
     }
 }

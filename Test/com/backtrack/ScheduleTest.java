@@ -29,7 +29,7 @@ public class ScheduleTest {
 
     @Test
     public void shouldPrintScheduleWhenThereIsOneItem() {
-        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.setETA(LocalTime.of(9,30), "get to work");
         scheduleMaker.add(get_to_work);
         scheduleMaker.add(eat_breakfast);
         scheduleMaker.add(shower);

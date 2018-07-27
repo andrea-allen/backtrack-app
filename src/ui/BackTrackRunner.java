@@ -1,5 +1,7 @@
 package ui;
 
+import com.backtrack.model.Item;
+import com.backtrack.model.Schedule;
 import com.backtrack.model.ScheduleMaker;
 
 import javax.swing.*;
@@ -10,20 +12,35 @@ import java.time.LocalTime;
 
 public class BackTrackRunner extends JPanel {
 
-    public static final int BOX_WIDTH = 640;
-    public static final int BOX_HEIGHT = 480;
+    public static final int BOX_WIDTH = 800;
+    public static final int BOX_HEIGHT = 200;
 
-    public static JButton inputButton = new JButton("Send");
+    public static JButton addActivity = new JButton("Add to your schedule");
 
-    public static JButton ETAButton = new JButton("Set ETA");
+    public static JButton addETA = new JButton("Set ETA");
 
-    public static JTextArea editTextArea = new JTextArea("Type Here!");
+    public static JButton Finish = new JButton("Finished? Generate your schedule");
 
-    public static JTextArea anotherTextArea = new JTextArea("Minute here!");
+    public static JButton startOver = new JButton("Start over");
 
-    public static JTextArea nameField = new JTextArea("Activity");
+    public static JTextArea ETAInput = new JTextArea("Enter your ETA");
+
+    public static JTextArea activityDuration = new JTextArea("Duration (in minutes)");
+
+    public static JTextArea destination = new JTextArea("Your ultimate destination (Ex. Work)");
+
+    public static JTextArea activityName = new JTextArea("Activity");
+
+    public static JTextArea displaySchedule = new JTextArea();
+
+    public static JTextArea Instructions = new JTextArea("Enter your activities in backwards order, starting with leaving for your destination and the time that will take.");
+
+
 
     private static ScheduleMaker scheduleMaker;
+    private Schedule schedule;
+    private InputValidator inputValidator;
+
     //TODO: Get the text input to feed scheduleMaker, print a blank schedule to the JPane
     //TODO: Have two fields, hour field and minute field, that reset after each input (name field too)
     //and enable repeated input for the next activity
@@ -31,72 +48,99 @@ public class BackTrackRunner extends JPanel {
     public BackTrackRunner(ScheduleMaker scheduleMaker) {
 
         this.scheduleMaker = scheduleMaker;
+        this.inputValidator = new InputValidator();
         this.setPreferredSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
 
-        editTextArea.setBackground(Color.BLUE);
-        editTextArea.setForeground(Color.WHITE);
+        activityName.setBackground(Color.PINK);
+        activityName.setForeground(Color.WHITE);
 
-        anotherTextArea.setBackground(Color.GREEN);
-        anotherTextArea.setForeground(Color.WHITE);
+        this.add(Instructions);
+        this.add(destination);
+        this.add(ETAInput);
+        this.add(addETA);
+        this.add(activityName);
+        this.add(activityDuration);
+        this.add(addActivity);
+        this.add(Finish);
+        this.add(startOver);
+        this.add(displaySchedule);
 
-        nameField.setBackground(Color.PINK);
-        nameField.setForeground(Color.WHITE);
-
-        this.add(inputButton, BorderLayout.WEST);
-        this.add(ETAButton, BorderLayout.SOUTH);
-        this.add(editTextArea, BorderLayout.SOUTH);
-        this.add(anotherTextArea, BorderLayout.EAST);
-        this.add(nameField, BorderLayout.NORTH);
-        //put a new button here to submit ETA separate from adding items to the schedule with different input fields
+        displaySchedule.setEditable(false);
+        Instructions.setEditable(false);
 
 
-        this.inputButton.addActionListener(new ActionListener() {
+        this.addActivity.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                //TODO: Have some feeder form method here, that gives the whole form to a scheduleMaker controller, once it's filled out, and then returns a completed schedule from scheduleMaker and prints it to the GUI.
+                String activity = activityName.getText();
 
-                String hourString = editTextArea.getText();
+                String duration = activityDuration.getText();
 
-                editTextArea.setText("more?");
-                //TODO why does the text box now disappear after I send the first message?
+                boolean durationIsValid = InputValidator.DurationIsValid(duration);
 
-                System.out.println(hourString);
+                if (durationIsValid) {
+                    scheduleMaker.add(new Item(activity, Integer.parseInt(duration)));
+                }
 
-                int hour = Integer.parseInt(hourString);
-
-                System.out.println("hour " + hour);
-
-                String minuteString = anotherTextArea.getText();
-
-                int minute = Integer.parseInt(minuteString);
-
-                System.out.println("minute: " + minute);
-
-                String activity = nameField.getText();
-
-                System.out.println("Activity  " + activity);
-
-                scheduleMaker.setETA(LocalTime.of(hour, minute));
-
-                System.out.println(scheduleMaker.getETA());
-
-                //TODO make an error exception / validation for no minute or hour entered
-
+                else {
+                    activityDuration.setBackground(Color.RED);
+                    activityDuration.setForeground(Color.WHITE);
+                    activityDuration.setText("Please enter the duration in minutes ('5', '45', etc.)");
+                }
 
             }
         });
 
-        this.ETAButton.addActionListener(new ActionListener() {
+        this.addETA.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                String ETA_string = ETAInput.getText();
+
+                if (ETAInput.getText().length()<5) {
+                    ETA_string = "0".concat(ETA_string);
+                    System.out.println(ETA_string);
+                }
+
+                String finalDestination = destination.getText();
+
+                if (InputValidator.ETAIsValid(ETA_string)) {
+                    scheduleMaker.setETA(LocalTime.parse(ETA_string), finalDestination);
+                    addETA.setText("Change ETA");
+                }
+
+                else {
+                    ETAInput.setForeground(Color.WHITE);
+                    ETAInput.setBackground(Color.RED);
+                    ETAInput.setText("ETA format must be '9:00' or '09:00'");
+                }
+            }
+        });
+
+        this.Finish.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scheduleMaker.updateItemTimes();
+                scheduleMaker.setWake_up_time();
+                scheduleMaker.generateSchedule();
+                schedule = scheduleMaker.getSchedule();
+                System.out.println(schedule.listItems());
+                displaySchedule.setBackground(Color.PINK);
+                displaySchedule.setText(schedule.listItems());
+                displaySchedule.setVisible(true);
+            }
+        });
+
+        this.startOver.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scheduleMaker.clear();
+                addETA.setText("Set ETA");
             }
         });
 
     }
 
-    //Should take a schedule factory as an argument and make an interactive controller that processes from the UI
-    //Should have a run method that updates the schedule and moves the process along
+
 }

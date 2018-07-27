@@ -35,7 +35,7 @@ public class ScheduleMakerTest {
 
     @Test
     public void shouldComputeStartTimeWhenETAIsSet(){
-        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.setETA(LocalTime.of(9,30), "get to work");
         assertEquals(LocalTime.of(9,30), scheduleMaker.getETA());
         scheduleMaker.add(get_to_work);
         scheduleMaker.updateItemTimes();
@@ -44,7 +44,7 @@ public class ScheduleMakerTest {
 
     @Test
     public void shouldProvideCorrectStartTimeWhenThereAreTwoItems() {
-        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.setETA(LocalTime.of(9,30), "get to work");
         scheduleMaker.add(get_to_work);
         scheduleMaker.add(eat_breakfast);
         scheduleMaker.updateItemTimes();
@@ -53,7 +53,7 @@ public class ScheduleMakerTest {
 
     @Test
     public void shouldUpdateItemTimes() {
-        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.setETA(LocalTime.of(9,30), "get to work");
         scheduleMaker.add(get_to_work);
         scheduleMaker.add(eat_breakfast);
         HashMap<String, LocalTime> itemTimes = scheduleMaker.getItemTime();
@@ -64,7 +64,7 @@ public class ScheduleMakerTest {
 
     @Test
     public void shouldYieldCorrectWakeUpTime() {
-        scheduleMaker.setETA(LocalTime.of(9,30));
+        scheduleMaker.setETA(LocalTime.of(9,30), "get to work");
         scheduleMaker.add(get_to_work);
         scheduleMaker.add(eat_breakfast);
         scheduleMaker.updateItemTimes();
