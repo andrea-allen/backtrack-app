@@ -14,12 +14,15 @@ public class BackTrackRunner extends JPanel {
 
     public static final int BOX_WIDTH = 1200;
     public static final int BOX_HEIGHT = 400;
+    private Font inputTextFont = new Font("Helvetica Neue", Font.ITALIC, 16);
+    private Font buttonFont = new Font("Helvetica Neue", Font.BOLD, 16);
+
 
     public static JButton addActivity = new JButton("Add to your schedule");
 
     public static JButton addETA = new JButton("Set ETA");
 
-    public static JButton Finish = new JButton("Finished? Generate your schedule");
+    public static JButton clickToFinish = new JButton("Finished? \n Generate your schedule");
 
     public static JButton startOver = new JButton("Start over");
 
@@ -29,13 +32,13 @@ public class BackTrackRunner extends JPanel {
 
     public static JTextArea destination = new JTextArea("Your ultimate destination (Ex. Work)");
 
-    public static JTextArea activityName = new JTextArea("Activity");
+    public static JTextArea activityName = new JTextArea("Type an activity");
 
     public static JTextArea displaySchedule = new JTextArea();
 
     public static JTextArea Instructions = new JTextArea("Enter your activities in backwards order, starting with leaving for your destination and the time that will take.");
 
-
+    public static JTextArea MiniSchedule = new JTextArea("Mini Schedule");
 
     private static ScheduleMaker scheduleMaker;
     private Schedule schedule;
@@ -50,24 +53,40 @@ public class BackTrackRunner extends JPanel {
         this.scheduleMaker = scheduleMaker;
         this.inputValidator = new InputValidator();
         this.setPreferredSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
-        this.setLayout(new GridLayout(2, 3, 3, 3));
+        this.setLayout(new GridLayout(3, 4, 3, 3));
 
         activityName.setBackground(Color.PINK);
         activityName.setForeground(Color.WHITE);
 
+        Instructions.setLineWrap(true);
+        Instructions.setFont(inputTextFont);
         this.add(Instructions);
-//        destination.setBounds(10, 10, 10, 10);
+        destination.setFont(inputTextFont);
+        destination.setLineWrap(true);
         this.add(destination);
-        this.add(ETAInput);
-        this.add(addETA);
+        activityName.setFont(inputTextFont);
         this.add(activityName);
-        this.add(activityDuration);
-        this.add(addActivity);
-        this.add(Finish);
-        this.add(startOver);
+        displaySchedule.setFont(inputTextFont);
+        displaySchedule.setLineWrap(true);
         this.add(displaySchedule);
+        startOver.setFont(buttonFont);
+        this.add(startOver);
+        ETAInput.setFont(inputTextFont);
+        this.add(ETAInput);
+        activityDuration.setFont(inputTextFont);
+        this.add(activityDuration);
+        MiniSchedule.setFont(inputTextFont);
+        this.add(MiniSchedule);
+        clickToFinish.setFont(buttonFont);
+        this.add(clickToFinish);
+        addETA.setFont(buttonFont);
+        this.add(addETA);
+        addActivity.setFont(buttonFont);
+        this.add(addActivity);
+
 
         displaySchedule.setEditable(false);
+        displaySchedule.setText("Your schedule will display here.");
         Instructions.setEditable(false);
 
 
@@ -120,7 +139,8 @@ public class BackTrackRunner extends JPanel {
             }
         });
 
-        this.Finish.addActionListener(new ActionListener() {
+        this.clickToFinish.addActionListener(new ActionListener() {
+            //TODO Add a finish validator
             @Override
             public void actionPerformed(ActionEvent e) {
                 scheduleMaker.updateItemTimes();
@@ -135,6 +155,7 @@ public class BackTrackRunner extends JPanel {
         });
 
         this.startOver.addActionListener(new ActionListener() {
+            //TODO Fix more with start over
             @Override
             public void actionPerformed(ActionEvent e) {
                 scheduleMaker.clear();

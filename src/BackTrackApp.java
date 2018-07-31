@@ -1,10 +1,7 @@
-import com.backtrack.model.Main;
 import com.backtrack.model.ScheduleFactory;
-import com.backtrack.model.ScheduleMaker;
 import ui.BackTrackRunner;
 
 import javax.swing.*;
-import java.io.IOException;
 
 public class BackTrackApp {
     public static void main(String[] args) {
@@ -17,12 +14,6 @@ public class BackTrackApp {
                 );
                 frame.pack();
                 frame.setVisible(true);
-                //TODO: Could probably remove this:
-                try {
-                    Main.main();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
     }

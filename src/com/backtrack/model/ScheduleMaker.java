@@ -6,12 +6,6 @@ import java.util.*;
 public class ScheduleMaker {
     private static final long SNOOZE_TIME = 10;
 
-    // ScheduleMaker should get input from JS fields from the user (see TWU project) through a controller of some kind maybe
-    // ScheduleMaker should know about the ETA
-    // Should just have methods to add items to its tables and then generate a schedule from it
-    // Should own a schedule object that it can edit and create
-    // Should be responsible for ETA and Wake up time
-
     private HashMap<String, LocalTime> itemTime;
     private LinkedList<Item> itemOrder;
     private Schedule schedule;
