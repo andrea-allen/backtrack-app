@@ -12,8 +12,8 @@ import java.time.LocalTime;
 
 public class BackTrackRunner extends JPanel {
 
-    public static final int BOX_WIDTH = 800;
-    public static final int BOX_HEIGHT = 200;
+    public static final int BOX_WIDTH = 1200;
+    public static final int BOX_HEIGHT = 400;
 
     public static JButton addActivity = new JButton("Add to your schedule");
 
@@ -50,11 +50,13 @@ public class BackTrackRunner extends JPanel {
         this.scheduleMaker = scheduleMaker;
         this.inputValidator = new InputValidator();
         this.setPreferredSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
+        this.setLayout(new GridLayout(2, 3, 3, 3));
 
         activityName.setBackground(Color.PINK);
         activityName.setForeground(Color.WHITE);
 
         this.add(Instructions);
+//        destination.setBounds(10, 10, 10, 10);
         this.add(destination);
         this.add(ETAInput);
         this.add(addETA);
