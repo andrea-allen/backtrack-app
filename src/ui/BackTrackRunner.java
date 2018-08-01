@@ -38,7 +38,7 @@ public class BackTrackRunner extends JPanel {
 
     public static JTextArea Instructions = new JTextArea("Enter your activities in backwards order, starting with leaving for your destination and the time that will take.");
 
-    public static JTextArea MiniSchedule = new JTextArea("Mini Schedule");
+    public static JTextArea MiniSchedule = new JTextArea("What you've added to your schedule:");
 
     private static ScheduleMaker scheduleMaker;
     private Schedule schedule;
@@ -60,11 +60,15 @@ public class BackTrackRunner extends JPanel {
 
         Instructions.setLineWrap(true);
         Instructions.setFont(inputTextFont);
+        Instructions.setBackground(Color.BLACK);
+        Instructions.setForeground(Color.WHITE);
         this.add(Instructions);
         destination.setFont(inputTextFont);
         destination.setLineWrap(true);
+        destination.setBackground(Color.YELLOW);
         this.add(destination);
         activityName.setFont(inputTextFont);
+        destination.setBackground(Color.YELLOW);
         this.add(activityName);
         displaySchedule.setFont(inputTextFont);
         displaySchedule.setLineWrap(true);
@@ -72,8 +76,10 @@ public class BackTrackRunner extends JPanel {
         startOver.setFont(buttonFont);
         this.add(startOver);
         ETAInput.setFont(inputTextFont);
+        ETAInput.setBackground(Color.YELLOW);
         this.add(ETAInput);
         activityDuration.setFont(inputTextFont);
+        activityDuration.setBackground(Color.YELLOW);
         this.add(activityDuration);
         MiniSchedule.setFont(inputTextFont);
         this.add(MiniSchedule);
@@ -103,6 +109,7 @@ public class BackTrackRunner extends JPanel {
 
                 if (durationIsValid) {
                     scheduleMaker.add(new Item(activity, Integer.parseInt(duration)));
+                    MiniSchedule.setText(MiniSchedule.getText() + '\n' + activity);
                 }
 
                 else {
@@ -129,6 +136,8 @@ public class BackTrackRunner extends JPanel {
                 if (InputValidator.ETAIsValid(ETA_string)) {
                     scheduleMaker.setETA(LocalTime.parse(ETA_string), finalDestination);
                     addETA.setText("Change ETA");
+                    ETAInput.setBackground(Color.WHITE);
+                    destination.setBackground(Color.WHITE);
                 }
 
                 else {
@@ -151,6 +160,8 @@ public class BackTrackRunner extends JPanel {
                 displaySchedule.setBackground(Color.PINK);
                 displaySchedule.setText(schedule.listItems());
                 displaySchedule.setVisible(true);
+                addActivity.setBackground(Color.WHITE);
+                activityDuration.setBackground(Color.WHITE);
             }
         });
 
@@ -160,6 +171,12 @@ public class BackTrackRunner extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 scheduleMaker.clear();
                 addETA.setText("Set ETA");
+                addActivity.setBackground(Color.YELLOW);
+                activityDuration.setBackground(Color.YELLOW);
+                ETAInput.setBackground(Color.YELLOW);
+                destination.setBackground(Color.YELLOW);
+                displaySchedule.setText("");
+                MiniSchedule.setText("What you've added to your schedule:");
             }
         });
 
